@@ -4,18 +4,25 @@
  *
  * @todo desc
  *
- * @version 0.0.2
+ * @version 0.0.3
  */
 abstract class PageAPI {
 
 	/**
-	 * Various information about the current settings page
+	 * Various information about the current page
 	 *
 	 * @since  0.0.1
 	 * @var    array
-	 * @access private
 	 */
 	protected $_args;
+
+	/**
+	 * @todo desc
+	 * 
+	 * @since 0.0.3
+	 * @var   array|bool
+	 */
+	protected $_tabs = false;
 
 	/**
 	 * The current screen
@@ -26,6 +33,13 @@ abstract class PageAPI {
 	 */
 	protected $screen;
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.1
+	 * @param  array $instance_args
+	 * @return void
+	 */
 	public function __construct( $instance_args = array() ) {
 
 		$instance_args['id'] = sanitize_key( $instance_args['id'] );
@@ -44,6 +58,7 @@ abstract class PageAPI {
 		);
 
 		$this->_args = $args;
+		$this->_tabs = $args['tabbed'];
 
 		if ( $args['ajax'] ) {
 			add_action( 'admin_footer', array( $this, '_js_vars' ) );
@@ -51,10 +66,12 @@ abstract class PageAPI {
 
 	} // END __construct()
 
-//	public function __construct( $args = array() ) {
-//		$this->args = $args;
-//	}
-
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.1
+	 * @return sring HTML output
+	 */
 	public function display() {
 		?>
 <div id="<?php echo $this->_args['id']; ?>" class="wrap <?php echo $this->_args['class']; ?>">
@@ -92,8 +109,35 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
-	 * @param type $tabs
+	 *
+	 * @since  0.0.3
+	 * @return array
+	 */
+	public function get_tabs() {
+		return apply_filters( "tabs_{$this->_args['id']}", $this->_tabs );
+	} // END get_tabs()
+
+	/**
+	 * @todo desc
+	 *
+	 * @since  0.0.3
+	 * @param  type $tabs
+	 * @return \PageAPI
+	 */
+	public function set_tabs( $tabs = array() ) {
+
+		// return array( 'tab' => 'nontab' );
+		$this->_tabs = $tabs;
+
+		return $this;
+
+	} // END set_tabs()
+
+	/**
+	 * @todo desc
+	 *
+	 * @since  0.0.2
+	 * @param  type $tabs
 	 * @return void
 	 */
 	public function add_tabs( $tabs ) {
@@ -111,7 +155,8 @@ abstract class PageAPI {
 	/**
 	 * @todo desc
 	 *
-	 * @param array $tabs
+	 * @since  0.0.2
+	 * @param  array $tabs
 	 * @return string ID of the active tab
 	 */
 	protected function get_active_tab( $tabs ) {
@@ -123,6 +168,13 @@ abstract class PageAPI {
 
 	} // END get_active_tab()
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.2
+	 * @param  array $tabs
+	 * @return string HTML output
+	 */
 	protected function tab_nav( $tabs ) {
 
 		$page = esc_html( $_GET['page'] );
@@ -141,6 +193,13 @@ abstract class PageAPI {
 
 	} // END tab_nav()
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.2
+	 * @param  string $tabs
+	 * @return void
+	 */
 	protected function tabs( $tabs ) {
 
 		$active_tab = $this->get_active_tab( $tabs );
@@ -155,17 +214,48 @@ abstract class PageAPI {
 
 	} // END tabs()
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.2
+	 * @param  string $tab_id
+	 * @param  bool $active
+	 * @return string HTML output
+	 */
 	protected function tab_content( $tab_id, $active = false ) {
 
-		$page_id    = str_replace( '-', '_', $this->_args['id'] );
+		$page       = str_replace( '-', '_', $this->_args['id'] );
 		$active_tab = $active ? 'display: block;' : 'display: none;';
 
-		echo "<div id='section-{$page_id}' class='section' style='{$active_tab}'>";
+		echo "<div id='section-{$tab_id}' class='section' style='{$active_tab}'>";
 
-			do_action( "{$page_id}_tab_{$tab_id}" );
+			do_action( "{$page}_tab_{$tab_id}" );
 
 		echo "</div>";
 
 	} // END tab_content()
+
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.2
+	 * @return string HTML output
+	 */
+	public function js_footer() { ?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
+			$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
+				e.preventDefault();
+				if ( ! $(this).hasClass('nav-tab-active') ) {
+					$('.section').hide();
+					$('.nav-tab').removeClass('nav-tab-active');
+					$(this).addClass('nav-tab-active');
+					$('#section-' + $(this).attr('id')).show();
+				}
+			});
+		});
+		</script>
+		<?php
+	} // END js_footer()
 
 } // END class PageAPI
