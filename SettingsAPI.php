@@ -4,35 +4,31 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.2
+ * @version 0.0.3
  */
 class SettingsAPI extends \PageAPI {
 
 	/**
 	 * settings sections array
 	 *
-	 * @var array
+	 * @since 0.0.1
+	 * @var   array
 	 */
-	private $settings_sections = array();
+	private $_sections = array();
 
 	/**
 	 * Settings fields array
 	 *
-	 * @var array
+	 * @since 0.0.1
+	 * @var   array
 	 */
-	private $settings_fields = array();
-
-	/**
-	 * Settings tabs array
-	 *
-	 * @var array
-	 */
-	private $settings_tabs = array();
+	private $_fields = array();
 
 	/**
 	 * @todo desc
 	 *
-	 * @param array $instance_args
+	 * @since  0.0.1
+	 * @param  array $instance_args
 	 * @return void
 	 */
 	public function __construct( $instance_args = array() ) {
@@ -61,6 +57,12 @@ class SettingsAPI extends \PageAPI {
 
 	} // END __construct()
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.1
+	 * @return void
+	 */
 	function register_settings() {
 
 		if ( false == get_option( $this->_args['id'] ) ) {
@@ -145,9 +147,15 @@ class SettingsAPI extends \PageAPI {
 
 	} // END register_field()
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since 0.0.2
+	 * @return string HTML output
+	 */
 	public function body() {
 
-//		add_action( 'admin_footer', array( $this, 'js_footer' ) );
+		add_action( 'admin_footer', array( $this, 'js_footer' ) );
 		?>
 <div id="poststuff">
 	<div id="post-body" class="metabox-holder columns-<?php echo $this->_args['sidebar'] ? '2' : '1'; ?>">
@@ -181,70 +189,88 @@ class SettingsAPI extends \PageAPI {
 </div><!-- #poststuff -->
 <?php
 
-	} // END display()
+	} // END body()
 
+	/**
+	 * Return filtered settings sections 
+	 * 
+	 * @sinec  0.0.1
+	 * @return array settings sections
+	 */
 	public function get_sections() {
-		return apply_filters( "sections_{$this->_args['id']}", $this->settings_sections );
+		return apply_filters( "sections_{$this->_args['id']}", $this->_sections );
 	} // END get_sections()
 
 	/**
 	 * Set settings sections
 	 *
-	 * @param array   $sections setting sections array
+	 * @since  0.0.1
+	 * @param  array $sections setting sections
+	 * @return \SettingsAPI
 	 */
 	public function set_sections( $sections ) {
 
-		$this->settings_sections = $sections;
+		$this->_sections = $sections;
 
 		return $this;
 
 	} // END set_sections()
 
+	/**
+	 * Return filtered settings fields
+	 * 
+	 * @since  0.0.1
+	 * @return array settings fields
+	 */
 	public function get_fields() {
-		return apply_filters( "fields_{$this->_args['id']}", $this->settings_fields );
+		return apply_filters( "fields_{$this->_args['id']}", $this->_fields );
 	} // END get_fields()
 
 	/**
 	 * Set settings fields
 	 *
-	 * @param array   $fields settings fields array
+	 * @since  0.0.1
+	 * @param  array $fields settings fields array
+	 * @return \SettingsAPI
 	 */
 	public function set_fields( $fields ) {
 
-		$this->settings_fields = $fields;
+		$this->_fields = $fields;
 
 		return $this;
 
 	} // END set_fields()
 
-	public function get_tabs() {
-		return apply_filters( "tabs_{$this->_args['id']}", $this->settings_tabs );
-	} // END get_tabs()
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.1
+	 * @param  string $tab_id
+	 * @param  bool $active
+	 * @return string
+	 */
+	protected function tab_content( $tab_id, $active = false ) { // $tab_id = general|advanced
 
-	public function set_tabs( $tabs = array() ) {
-
-		// return array( 'tab' => 'nontab' );
-		$this->settings_tabs = $tabs;
-
-		return $this;
-
-	} // END set_tabs()
-
-	protected function tab_content( $tab_id, $active = false ) { // $id = general|advanced
-
+		$page_id    = str_replace( '-', '_', $this->_args['id'] ) . '-' . $tab_id;
 		$page       = $this->_args['id'] . '_' . $tab_id;
 		$active_tab = $active ? 'display: block;' : 'display: none;';
 		
-		echo "<div id='section-{$tab_id}' class='settings-section' style='{$active_tab}'>"; // @todo ESC attributes required?
+		echo "<div id='section-{$tab_id}' class='section' style='{$active_tab}'>";
 		
 		do_settings_sections( $page );
 
-		echo 'do_settings_sections: ' . $page; // TEMP debug
+		echo 'do_settings_sections: ' . $page_id; // TEMP debug
 
 		echo "</div>";
 
 	} // END tab_content()
 
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.1
+	 * @return string HTML submit button
+	 */
 	protected function print_submit() {
 		submit_button();
 	}
@@ -357,7 +383,7 @@ class SettingsAPI extends \PageAPI {
 	 * @param string  $option  settings field name
 	 * @param string  $section the section name this field belongs to
 	 * @param string  $default default text if it's not found
-	 * @return string
+	 * @return mixed
 	 */
 	public function get_option( $option, $section, $default = '' ) {
 
@@ -368,70 +394,79 @@ class SettingsAPI extends \PageAPI {
 		}
 
 		return $default;
+
+	} // END get_option()
+
+	/**
+	 * @todo desc
+	 * 
+	 * @since  0.0.1
+	 * @return string HTML output
+	 */
+	public function _js_footer() { ?>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
+		e.preventDefault();
+		if ( ! $(this).hasClass('nav-tab-active') ) {
+			$('.settings-section').hide();
+			$('.nav-tab').removeClass('nav-tab-active');
+			$(this).addClass('nav-tab-active');
+			$('#section-' + $(this).attr('id')).show();
+		}
+	});
+});
+jQuery(document).ready(function($) {
+	// Switches option sections
+	$('.group').hide();
+	var activetab = '';
+	if (typeof(localStorage) !== 'undefined' ) {
+		activetab = localStorage.getItem("activetab");
 	}
-
-	public function js_footer() { ?>
-		<script type="text/javascript">
-		jQuery(document).ready(function($){
-			$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
-				e.preventDefault();
-				if ( ! $(this).hasClass('nav-tab-active') ) {
-					$('.settings-section').hide();
-					$('.nav-tab').removeClass('nav-tab-active');
-					$(this).addClass('nav-tab-active');
-					$('#section-' + $(this).attr('id')).show();
-				}
-			});
+	if (activetab !== '' && $(activetab).length ) {
+		$(activetab).fadeIn();
+	} else {
+		$('.group:first').fadeIn();
+	}
+	$('.group .collapsed').each(function(){
+		$(this).find('input:checked').parent().parent().parent().nextAll().each(
+		function(){
+			if ($(this).hasClass('last')) {
+				$(this).removeClass('hidden');
+				return false;
+			}
+			$(this).filter('.hidden').removeClass('hidden');
 		});
-		jQuery(document).ready(function($) {
-			// Switches option sections
-			$('.group').hide();
-			var activetab = '';
-			if (typeof(localStorage) !== 'undefined' ) {
-				activetab = localStorage.getItem("activetab");
-			}
-			if (activetab !== '' && $(activetab).length ) {
-				$(activetab).fadeIn();
-			} else {
-				$('.group:first').fadeIn();
-			}
-			$('.group .collapsed').each(function(){
-				$(this).find('input:checked').parent().parent().parent().nextAll().each(
-				function(){
-					if ($(this).hasClass('last')) {
-						$(this).removeClass('hidden');
-						return false;
-					}
-					$(this).filter('.hidden').removeClass('hidden');
-				});
-			});
+	});
 
-			if (activetab !== '' && $(activetab + '-tab').length ) {
-				$(activetab + '-tab').addClass('nav-tab-active');
-			}
-			else {
-				$('.nav-tab-wrapper a:first').addClass('nav-tab-active');
-			}
-			$('.nav-tab-wrapper a').click(function(evt) {
-				$('.nav-tab-wrapper a').removeClass('nav-tab-active');
-				$(this).addClass('nav-tab-active').blur();
-				var clicked_group = $(this).attr('href');
-				if (typeof(localStorage) != 'undefined' ) {
-					localStorage.setItem("activetab", $(this).attr('href'));
-				}
-				$('.group').hide();
-				$(clicked_group).fadeIn();
-				evt.preventDefault();
-			});
-		});
-		</script>
-		<?php
+	if (activetab !== '' && $(activetab + '-tab').length ) {
+		$(activetab + '-tab').addClass('nav-tab-active');
+	}
+	else {
+		$('.nav-tab-wrapper a:first').addClass('nav-tab-active');
+	}
+	$('.nav-tab-wrapper a').click(function(evt) {
+		$('.nav-tab-wrapper a').removeClass('nav-tab-active');
+		$(this).addClass('nav-tab-active').blur();
+		var clicked_group = $(this).attr('href');
+		if (typeof(localStorage) != 'undefined' ) {
+			localStorage.setItem("activetab", $(this).attr('href'));
+		}
+		$('.group').hide();
+		$(clicked_group).fadeIn();
+		evt.preventDefault();
+	});
+});
+</script>
+<?php
+
 	} // END js_footer()
 
 	/**
 	 * Send required variables to JavaScript land
 	 *
-	 * @access public
+	 * @since  0.0.1
+	 * @return string
 	 */
 	public function _js_vars() {
 		/**
