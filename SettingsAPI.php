@@ -4,7 +4,7 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.1
+ * @version 0.0.2
  */
 class SettingsAPI extends \PageAPI {
 
@@ -30,26 +30,14 @@ class SettingsAPI extends \PageAPI {
 	private $settings_tabs = array();
 
 	/**
-	 * Various information about the current settings page
+	 * @todo desc
 	 *
-	 * @since  0.0.1
-	 * @var    array
-	 * @access private
+	 * @param array $instance_args
+	 * @return void
 	 */
-	private $_args;
-
-	/**
-	 * The current screen
-	 *
-	 * @since  0.0.1
-	 * @var    object
-	 * @access protected
-	 */
-	protected $screen;
-
 	public function __construct( $instance_args = array() ) {
 
-		parent::__construct($instance_args); // @todo
+		// parent::__construct($instance_args); // @todo
 
 		$instance_args['id'] = sanitize_key( $instance_args['id'] );
 
@@ -60,7 +48,7 @@ class SettingsAPI extends \PageAPI {
 				'title'   => __( 'Settings' ),
 				'tabbed'  => false,
 				'ajax'    => false,
-				'sidebar' => false, // @todo sidebar "post-new.php"-style
+				'sidebar' => false,
 				'class'   => 'page settings-page'
 			)
 		);
@@ -166,7 +154,8 @@ class SettingsAPI extends \PageAPI {
 		<div id="post-body-content" style="position: relative;">
 		<?php
 		if ( $this->_args['tabbed'] ) {
-			$this->tab_nav();
+			$tabs = $this->get_tabs();
+			$this->tab_nav( $tabs );
 		}
 		?>
 		<form action="" method="post">
@@ -174,9 +163,9 @@ class SettingsAPI extends \PageAPI {
 			wp_nonce_field( "{$this->_args['id']}-settings-update", "{$this->_args['id']}-settings-nonce" ); // generate ids
 
 			if ( $this->_args['tabbed'] ) {
-				$this->tabs();
+				$this->tabs( $tabs );
 			} else {
-				$this->print_table( $this->_args['id'], true );
+				$this->tab_content( $this->_args['id'], true );
 			}
 
 			$this->print_submit();
@@ -241,58 +230,20 @@ class SettingsAPI extends \PageAPI {
 
 	} // END set_tabs()
 
-	public function get_active_tab( $tabs ) {
+	protected function tab_content( $tab_id, $active = false ) { // $id = general|advanced
 
-		$first_tab = key( $tabs );
-		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $first_tab ;
-
-		return $active_tab;
-
-	} // END get_active_tab()
-
-	protected function tab_nav() {
-
-		$page = $_GET['page']; // @todo secure?
-		$tabs = $this->get_tabs();
-		$active_tab = $this->get_active_tab( $tabs );
-
-		echo '<h2 class="nav-tab-wrapper" id="' . esc_attr( $this->_args['id'] ) . '" >';
-
-			foreach ( (array) $tabs as $id => $title  ) {
-				$active_class = ( $active_tab == $id ? ' nav-tab-active' : '' );
-				echo "<a id='{$id}' class='nav-tab{$active_class}' href='?page={$page}&tab={$id}'>{$title}</a>"; // class='{$this->_args['id']}-tab
-			} // END foreach
-
-		echo '</h2><!-- .nav-tab-wrapper -->';
-
-	} // END tab_nav()
-
-	protected function tabs() {
-
-		$tabs = $this->get_tabs();
-		$active_tab = $this->get_active_tab( $tabs );
-
-		foreach ( (array) $tabs as $tab_id => $title ) {
-			$active = ( $active_tab == $tab_id ? true : false );
-			$this->print_table( $tab_id, $active );
-		} // END foreach
-
-	} // END tabs()
-
-	protected function print_table( $id, $active = false ) { // $id = general|advanced
-
+		$page       = $this->_args['id'] . '_' . $tab_id;
 		$active_tab = $active ? 'display: block;' : 'display: none;';
-
-		echo "<div id='section-{$id}' class='settings-section' style='{$active_tab}'>"; // @todo ESC attributes required?
-
-		$page = $this->_args['id'] . '_' . $id;
+		
+		echo "<div id='section-{$tab_id}' class='settings-section' style='{$active_tab}'>"; // @todo ESC attributes required?
+		
 		do_settings_sections( $page );
 
 		echo 'do_settings_sections: ' . $page; // TEMP debug
 
 		echo "</div>";
 
-	} // END print_table()
+	} // END tab_content()
 
 	protected function print_submit() {
 		submit_button();
