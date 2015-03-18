@@ -4,7 +4,7 @@
  *
  * @todo desc
  *
- * @version 0.0.5
+ * @version 0.0.6-dev
  */
 abstract class PageAPI {
 
@@ -88,9 +88,7 @@ abstract class PageAPI {
 			<div id="post-body-content" style="position: relative;">
 				<?php $this->body(); ?>
 			</div><!-- #post-body-content -->
-			<div id="postbox-container-1" class="postbox-container">
-				<?php $this->sidebar(); ?>
-			</div><!-- #postbox-container-1 .postbox-container -->
+			<?php if ( $this->_args['sidebar'] ) { $this->sidebar(); } ?>
 		</div>
 		<div class="clear"></div>
 	</div><!-- #poststuff -->
@@ -103,10 +101,22 @@ abstract class PageAPI {
 	 */
 	public abstract function body();
 
+	/**
+	 * @todo desc
+	 *
+	 * @since  0.0.5
+	 * @return string HTML output of the sidebar
+	 */
 	protected function sidebar() {
+
+		echo '<div id="postbox-container-1" class="postbox-container">';
+
 		do_action( 'page_sidebar' );
 		do_action( "page_sidebar_{$this->_args['id']}" );
-	}
+
+		echo '</div><!-- #postbox-container-1 .postbox-container -->';
+
+	} // END sidebar()
 
 	/**
 	 * @todo desc

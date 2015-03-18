@@ -4,7 +4,7 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.5
+ * @version 0.0.6-dev
  */
 class SettingsAPI extends \PageAPI {
 
