@@ -4,7 +4,7 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.3
+ * @version 0.0.5
  */
 class SettingsAPI extends \PageAPI {
 
@@ -44,7 +44,7 @@ class SettingsAPI extends \PageAPI {
 				'tabbed'  => false,
 				'ajax'    => false,
 				'sidebar' => false,
-				'class'   => 'page settings-page'
+				'class'   => 'page settings-page',
 			)
 		);
 
@@ -62,14 +62,13 @@ class SettingsAPI extends \PageAPI {
 	 * @since  0.0.1
 	 * @return void
 	 */
-	protected function register_settings() {
+	public function register_settings() {
 
 		if ( false == get_option( $this->_args['id'] ) ) {
 			add_option( $this->_args['id'] );
 		}
 
 		foreach ( $this->get_sections() as $section => $values ) {
-
 			$tab = ( isset( $values['tab'] ) ) ? $values['tab'] : 'nontab';
 			$fields = $this->get_fields();
 
@@ -79,7 +78,6 @@ class SettingsAPI extends \PageAPI {
 			foreach ( $fields[ $section ] as $section_id => $section_values ) {
 				$this->register_field( $tab, $section, $section_id, $section_values );
 			}
-
 		} // END foreach sections + fields
 
 		// creates our settings in the options table
@@ -109,12 +107,10 @@ class SettingsAPI extends \PageAPI {
 	protected function register_field( $tab, $section, $field, $values ) {
 
 		if ( isset( $values['option'] ) ) {
-
 			$option = $values['option'];
 			if ( false == get_option( $values['option'] ) ) {
 				add_option( $values['option'] );
 			}
-
 		} else {
 			$option = $this->_args['id'];
 		}
@@ -155,11 +151,7 @@ class SettingsAPI extends \PageAPI {
 	public function body() {
 
 		add_action( 'admin_footer', array( $this, 'js_footer' ) );
-		?>
-<div id="poststuff">
-	<div id="post-body" class="metabox-holder columns-<?php echo $this->_args['sidebar'] ? '2' : '1'; ?>">
-		<div id="post-body-content" style="position: relative;">
-		<?php
+
 		if ( $this->_args['tabbed'] ) {
 			$tabs = $this->get_tabs();
 			$this->tab_nav( $tabs );
@@ -179,13 +171,7 @@ class SettingsAPI extends \PageAPI {
 			?>
 		</form>
 		<?php do_action( "{$this->_args['id']}_post_form" ); // @todo rename ?>
-		</div><!-- #post-body-content -->
-		<div id="postbox-container-1" class="postbox-container">
-			<?php do_action( 'ga_sidebar_services' ); ?>
-		</div><!-- #postbox-container-1 .postbox-container -->
-	</div>
-	<div class="clear"></div>
-</div><!-- #poststuff -->
+
 <?php
 
 	} // END body()
@@ -290,7 +276,7 @@ class SettingsAPI extends \PageAPI {
 		$html = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['option'], $args['id'], $value );
 		$html .= sprintf( '<p class="description"> %s</p>', $args['desc'] );
 
-		echo esc_html( $html );
+		echo $html;
 
 	} // END field_text()
 
@@ -306,7 +292,7 @@ class SettingsAPI extends \PageAPI {
 		$html .= sprintf( '<input type="checkbox" class="checkbox" id="%1$s[%2$s]" name="%1$s[%2$s]" value="on"%4$s />', $args['option'], $args['id'], $value, checked( $value, 'on', false ) );
 		$html .= sprintf( '<label for="%1$s[%2$s]"> %3$s</label>', $args['section'], $args['id'], $args['desc'] );
 
-		echo esc_html( $html );
+		echo $html;
 
 	} // END field_checkbox()
 
@@ -325,7 +311,7 @@ class SettingsAPI extends \PageAPI {
 		}
 		$html .= sprintf( '<span class="description"> %s</label>', $args['desc'] );
 
-		echo esc_html( $html );
+		echo $html;
 
 	} // END field_radio()
 
@@ -341,7 +327,7 @@ class SettingsAPI extends \PageAPI {
 		$html = sprintf( '<textarea rows="5" cols="55" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]">%4$s</textarea>', $size, $args['option'], $args['id'], $value );
 		$html .= sprintf( '<br><span class="description"> %s</span>', $args['desc'] );
 
-		echo esc_html( $html );
+		echo $html;
 
 	}
 
@@ -363,7 +349,7 @@ class SettingsAPI extends \PageAPI {
 		$html .= sprintf( '</select>' );
 		$html .= sprintf( '<p class="description"> %s</p>', $args['desc'] );
 
-		echo esc_html( $html );
+		echo $html;
 
 	}
 

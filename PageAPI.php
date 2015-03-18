@@ -4,7 +4,7 @@
  *
  * @todo desc
  *
- * @version 0.0.3
+ * @version 0.0.5
  */
 abstract class PageAPI {
 
@@ -89,10 +89,7 @@ abstract class PageAPI {
 				<?php $this->body(); ?>
 			</div><!-- #post-body-content -->
 			<div id="postbox-container-1" class="postbox-container">
-				<?php
-				do_action( 'page_sidebar' );
-				do_action( "page_sidebar_{$this->_args['id']}" );
-				?>
+				<?php $this->sidebar(); ?>
 			</div><!-- #postbox-container-1 .postbox-container -->
 		</div>
 		<div class="clear"></div>
@@ -105,6 +102,11 @@ abstract class PageAPI {
 	 * @todo desc
 	 */
 	public abstract function body();
+
+	protected function sidebar() {
+		do_action( 'page_sidebar' );
+		do_action( "page_sidebar_{$this->_args['id']}" );
+	}
 
 	/**
 	 * @todo desc
@@ -120,7 +122,7 @@ abstract class PageAPI {
 	 * @todo desc
 	 *
 	 * @since  0.0.3
-	 * @param  type $tabs
+	 * @param  array $tabs
 	 * @return \PageAPI
 	 */
 	public function set_tabs( $tabs = array() ) {
@@ -196,7 +198,7 @@ abstract class PageAPI {
 	 * @todo desc
 	 * 
 	 * @since  0.0.2
-	 * @param  string $tabs
+	 * @param  array $tabs
 	 * @return void
 	 */
 	protected function tabs( $tabs ) {
