@@ -38,7 +38,6 @@ abstract class PageAPI {
 	 * 
 	 * @since  0.0.1
 	 * @param  array $instance_args
-	 * @return void
 	 */
 	public function __construct( $instance_args = array() ) {
 
@@ -182,12 +181,12 @@ abstract class PageAPI {
 
 		echo '<h2 class="nav-tab-wrapper" id="' . esc_attr( $this->_args['id'] ) . '" >';
 
-			foreach ( (array) $tabs as $tab_id => $title  ) {
+		foreach ( (array) $tabs as $tab_id => $title  ) {
 
-				$active_class = ( $active_tab == $tab_id ? ' nav-tab-active' : '' );
-				echo "<a id='{$tab_id}' class='nav-tab{$active_class}' href='?page={$page}&tab={$tab_id}'>{$title}</a>"; // class='{$this->_args['id']}-tab
+			$active_class = ( $active_tab == $tab_id ? ' nav-tab-active' : '' );
+			echo "<a id='{$tab_id}' class='nav-tab{$active_class}' href='?page={$page}&tab={$tab_id}'>{$title}</a>"; // class='{$this->_args['id']}-tab
 
-			} // END foreach
+		} // END foreach
 
 		echo '</h2><!-- .nav-tab-wrapper -->';
 
@@ -231,7 +230,7 @@ abstract class PageAPI {
 
 			do_action( "{$page}_tab_{$tab_id}" );
 
-		echo "</div>";
+		echo '</div>';
 
 	} // END tab_content()
 

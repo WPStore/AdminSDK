@@ -29,7 +29,6 @@ class SettingsAPI extends \PageAPI {
 	 *
 	 * @since  0.0.1
 	 * @param  array $instance_args
-	 * @return void
 	 */
 	public function __construct( $instance_args = array() ) {
 
@@ -63,7 +62,7 @@ class SettingsAPI extends \PageAPI {
 	 * @since  0.0.1
 	 * @return void
 	 */
-	function register_settings() {
+	protected function register_settings() {
 
 		if ( false == get_option( $this->_args['id'] ) ) {
 			add_option( $this->_args['id'] );
@@ -94,8 +93,8 @@ class SettingsAPI extends \PageAPI {
 
 	protected function register_section( $tab, $section, $values ) {
 
-		if ( isset( $values['desc'] ) && !empty( $values['desc'] ) ) {
-//			$values['desc']	 = '<div class="inside">' . $values['desc'] . '</div>';
+		if ( isset( $values['desc'] ) && ! empty( $values['desc'] ) ) {
+			// $values['desc']	 = '<div class="inside">' . $values['desc'] . '</div>';
 			$callback = create_function( '', 'echo "<p>' . str_replace( '"', '\"', $values['desc'] ) . '</p>";' );
 		} else {
 			$callback = '__return_false';
@@ -182,7 +181,7 @@ class SettingsAPI extends \PageAPI {
 		<?php do_action( "{$this->_args['id']}_post_form" ); // @todo rename ?>
 		</div><!-- #post-body-content -->
 		<div id="postbox-container-1" class="postbox-container">
-			<?php do_action( "ga_sidebar_services" ); ?>
+			<?php do_action( 'ga_sidebar_services' ); ?>
 		</div><!-- #postbox-container-1 .postbox-container -->
 	</div>
 	<div class="clear"></div>
@@ -261,7 +260,7 @@ class SettingsAPI extends \PageAPI {
 
 		echo 'do_settings_sections: ' . $page_id; // TEMP debug
 
-		echo "</div>";
+		echo '</div>';
 
 	} // END tab_content()
 
@@ -291,7 +290,7 @@ class SettingsAPI extends \PageAPI {
 		$html = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['option'], $args['id'], $value );
 		$html .= sprintf( '<p class="description"> %s</p>', $args['desc'] );
 
-		echo $html;
+		echo esc_html( $html );
 
 	} // END field_text()
 
@@ -307,7 +306,7 @@ class SettingsAPI extends \PageAPI {
 		$html .= sprintf( '<input type="checkbox" class="checkbox" id="%1$s[%2$s]" name="%1$s[%2$s]" value="on"%4$s />', $args['option'], $args['id'], $value, checked( $value, 'on', false ) );
 		$html .= sprintf( '<label for="%1$s[%2$s]"> %3$s</label>', $args['section'], $args['id'], $args['desc'] );
 
-		echo $html;
+		echo esc_html( $html );
 
 	} // END field_checkbox()
 
@@ -326,7 +325,7 @@ class SettingsAPI extends \PageAPI {
 		}
 		$html .= sprintf( '<span class="description"> %s</label>', $args['desc'] );
 
-		echo $html;
+		echo esc_html( $html );
 
 	} // END field_radio()
 
@@ -342,7 +341,7 @@ class SettingsAPI extends \PageAPI {
 		$html = sprintf( '<textarea rows="5" cols="55" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]">%4$s</textarea>', $size, $args['option'], $args['id'], $value );
 		$html .= sprintf( '<br><span class="description"> %s</span>', $args['desc'] );
 
-		echo $html;
+		echo esc_html( $html );
 
 	}
 
@@ -364,7 +363,7 @@ class SettingsAPI extends \PageAPI {
 		$html .= sprintf( '</select>' );
 		$html .= sprintf( '<p class="description"> %s</p>', $args['desc'] );
 
-		echo $html;
+		echo esc_html( $html );
 
 	}
 
@@ -389,8 +388,8 @@ class SettingsAPI extends \PageAPI {
 
 		$options = get_option( $section );
 
-		if ( isset( $options[$option] ) ) {
-			return $options[$option];
+		if ( isset( $options[ $option ] ) ) {
+			return $options[ $option ];
 		}
 
 		return $default;
