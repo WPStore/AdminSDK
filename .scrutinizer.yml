@@ -19,12 +19,7 @@ tools:
             undef: true
             unused: true
             browser: true
-            globals: {
-                _: false,
-                Backbone: false,
-                jQuery: false,
-                wp: false
-            }
+            globals: { _: false, Backbone: false, jQuery: false, wp: false }
 
     # Runs PHP Code Sniffer
     php_code_sniffer:
