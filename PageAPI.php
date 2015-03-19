@@ -42,7 +42,6 @@ abstract class PageAPI {
 	public function __construct( $instance_args = array() ) {
 
 		$instance_args['id'] = sanitize_key( $instance_args['id'] );
-		// str_replace('.', '_', $title);
 
 		$args = wp_parse_args(
 			$instance_args,
@@ -69,21 +68,9 @@ abstract class PageAPI {
 	 * @since  0.0.1
 	 * @return sring HTML output
 	 */
-	public function display() {
-		?>
+	public function display() { ?>
 <div id="<?php echo $this->_args['id']; ?>" class="wrap <?php echo $this->_args['class']; ?>">
-	<div class="page-header">
-		<div class="header-right alignright">
-			<?php
-			/**
-			 * @todo merge all sidebar widgets to allow for custom sort
-			 */
-			do_action( 'page_header_right' );
-			do_action( "page_header_right_{$this->_args['id']}" );
-			?>
-		</div>
-		<h2><?php echo $this->_args['title']; ?></h2>
-	</div>
+	<?php $this->header(); ?>
 	<div id="poststuff">
 		<div id="post-body" class="metabox-holder columns-<?php echo $this->_args['sidebar'] ? '2' : '1'; ?>">
 			<div id="post-body-content" style="position: relative;">
@@ -93,9 +80,26 @@ abstract class PageAPI {
 		</div>
 		<div class="clear"></div>
 	</div><!-- #poststuff -->
+	<?php $this->footer(); ?>
 </div><!-- .wrap -->
 <?php
 	} // END display()
+
+	/**
+	 * @todo desc
+	 * @todo action docu
+	 * 
+	 * @since 0.0.7
+	 */
+	protected function header() { ?>
+		<div class="page-header">
+			<div class="header-right alignright">
+				<?php do_action( 'page_header_right', $this->_args['id'] ); ?>
+			</div>
+			<h2><?php echo $this->_args['title']; ?></h2>
+		</div>
+	<?php
+	}
 
 	/**
 	 * @todo desc
@@ -104,23 +108,34 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
+	 * @todo action docu
+	 * @todo possible action alias
+	 *       do_action( "page_sidebar_{$this->_args['id']}" );
 	 *
 	 * @since  0.0.5
 	 * @return string HTML output of the sidebar
 	 */
-	protected function sidebar() {
-
-		echo '<div id="postbox-container-1" class="postbox-container">';
-
-		/**
-		 * @todo merge all sidebar widgets to allow for custom sort
-		 */
-		do_action( 'page_sidebar' );
-		do_action( "page_sidebar_{$this->_args['id']}" );
-
-		echo '</div><!-- #postbox-container-1 .postbox-container -->';
-
+	protected function sidebar() { ?>
+		<div id="postbox-container-1" class="postbox-container">
+			<?php do_action( 'page_sidebar', $this->_args['id'] ); ?>
+		</div><!-- #postbox-container-1 .postbox-container -->
+	<?php
 	} // END sidebar()
+
+	/**
+	 * @todo desc
+	 * @todo action docu
+	 * @todo possible action alias
+	 *       do_action( "page_footer_{$this->_args['id']}" );
+	 *
+	 * @since 0.0.7
+	 * @param type $wrap
+	 */
+	protected function footer( $wrap = true ) {
+		if ( $wrap ) { echo '<div id="page-footer">'; }
+			do_action( 'page_footer', $this->_args['id'] );
+		if ( $wrap ) { echo '</div>'; }
+	} // END footer()
 
 	/**
 	 * @todo desc
@@ -139,14 +154,13 @@ abstract class PageAPI {
 	 * @param  array $tabs
 	 * @return \PageAPI
 	 */
-	public function set_tabs( $tabs = array() ) {
-
-		// return array( 'tab' => 'nontab' );
-		$this->_tabs = $tabs;
-
-		return $this;
-
-	} // END set_tabs()
+//	public function set_tabs( $tabs = array() ) {
+//
+//		$this->_tabs = $tabs;
+//
+//		return $this;
+//
+//	} // END set_tabs()
 
 	/**
 	 * @todo desc
@@ -161,7 +175,7 @@ abstract class PageAPI {
 
 			$page_id = str_replace( '-', '_', $this->_args['id'] );
 
-			add_action( "{$page_id}_tab_{$tab_id}", array( $this, 'tab_'.$tab_id ) );
+			add_action( "{$page_id}_tab_{$tab_id}", array( $this, "tab_{$tab_id}" ) );
 
 		} // END foreach
 
@@ -249,28 +263,5 @@ abstract class PageAPI {
 		echo '</div>';
 
 	} // END tab_content()
-
-	/**
-	 * @todo desc
-	 * 
-	 * @since  0.0.2
-	 * @return string HTML output
-	 */
-	public function js_footer() { ?>
-		<script type="text/javascript">
-		jQuery(document).ready(function($){
-			$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
-				e.preventDefault();
-				if ( ! $(this).hasClass('nav-tab-active') ) {
-					$('.section').hide();
-					$('.nav-tab').removeClass('nav-tab-active');
-					$(this).addClass('nav-tab-active');
-					$('#section-' + $(this).attr('id')).show();
-				}
-			});
-		});
-		</script>
-		<?php
-	} // END js_footer()
 
 } // END class PageAPI
