@@ -81,6 +81,14 @@ class SettingsAPI extends \PageAPI {
 		*/
 	} // END register_settings()
 
+	/**
+	 * @todo desc
+	 * @todo replace create_function() with anonymous functions
+	 * 
+	 * @param string $tab
+	 * @param string $section
+	 * @param array  $values
+	 */
 	protected function register_section( $tab, $section, $values ) {
 
 		if ( isset( $values['desc'] ) && ! empty( $values['desc'] ) ) {
@@ -195,27 +203,7 @@ class SettingsAPI extends \PageAPI {
 
 	} // END set_sections()
 
-	function sections() {
-		$sections = array(
-			'main'     => array(
-				'tab'	 => 'general',
-				'title'	 => __( 'Main Options', 'google-analyticator' ), // null -- hide the text
-				'desc'	 => __( 'This is a short description for a settings SECTION', 'google-analyticator' ),
-			),
-			'security' => array(
-				'tab'	 => 'general',
-				'title'	 => __( 'Security', 'google-analyticator' ),
-//				'desc'	 => __( 'SEC This is a short description for a settings SECTION', 'google-analyticator' ),
-			),
-			'privacy'  => array(
-				'tab'	 => 'advanced',
-				'title'	 => __( 'Privacy', 'google-analyticator' ),
-				'desc'	 => __( 'Privacy! hort description for a settings SECTION', 'google-analyticator' ),
-			),
-		);
-
-		return $sections;
-	}
+	function sections() {}
 
 	/**
 	 * Return filtered settings fields
@@ -242,70 +230,7 @@ class SettingsAPI extends \PageAPI {
 
 	} // END set_fields()
 
-	function fields() {
-
-		$fields = array(
-			'main'		 => array(
-				'google_ua'	 => array(
-					'label'	 => __( 'Google Analytics UA', 'google-analyticator' ),
-					'desc'	 => __( 'Set your UA', 'google-analyticator' ),
-					'type'	 => 'google_ua',
-//					'option' => 'analytics_2nd', // save into add_option('analytics_2nd') || if (!isset 'option') add_option( $this->_args['id'] )
-				),
-				'textarea'	 => array(
-					'label'	 => __( 'Textarea Input', 'wedevs' ),
-					'desc'	 => __( 'Textarea description', 'wedevs' ),
-					'type'	 => 'text'
-				),
-			),
-			'security'	 => array(
-				'google_ua'	 => array(
-					'label'	 => __( 'Text Input (integer validation)', 'google-analyticator' ),
-					'desc'	 => __( 'Text input description', 'google-analyticator' ),
-					'type'	 => 'google_ua',
-				),
-				'textarea'	 => array(
-					'label'	 => __( 'Textarea Input', 'wedevs' ),
-					'desc'	 => __( 'Textarea description', 'wedevs' ),
-					'type'	 => 'text'
-				),
-				'checkbox'	 => array(
-					'label'	 => __( 'Checkbox', 'wedevs' ),
-					'desc'	 => __( 'Checkbox Label', 'wedevs' ),
-					'type'	 => 'text'
-				),
-			),
-			'privacy'	 => array(
-				'google_ua'	 => array(
-					'label'	 => __( 'Text Input (integer validation)', 'google-analyticator' ),
-					'desc'	 => __( 'Text input description', 'google-analyticator' ),
-					'type'	 => 'google_ua',
-				),
-				'textarea'	 => array(
-					'label'	 => __( 'Textarea Input', 'wedevs' ),
-					'desc'	 => __( 'Textarea description', 'wedevs' ),
-					'type'	 => 'textarea'
-				),
-				'checkbox'	 => array(
-					'label'	 => __( 'Checkbox', 'wedevs' ),
-					'desc'	 => __( 'Checkbox Label', 'wedevs' ),
-					'type'	 => 'checkbox'
-				),
-				'radio'		 => array(
-					'label'		 => __( 'Radio Button', 'wedevs' ),
-					'desc'		 => __( 'A radio button', 'wedevs' ),
-					'type'		 => 'radio',
-					'options'	 => array(
-						'yes'	 => 'Yes',
-						'no'	 => 'No'
-					)
-				),
-			),
-		);
-
-		return $fields;
-
-	}
+	function fields() {}
 
 	/**
 	 * @todo desc
@@ -315,7 +240,7 @@ class SettingsAPI extends \PageAPI {
 	 * @param  bool $active
 	 * @return string
 	 */
-	protected function tab_content( $tab_id, $active = false ) { // $tab_id = general|advanced
+	protected function tab_content( $tab_id, $active = false ) {
 
 		$page_id    = str_replace( '-', '_', $this->_args['id'] ) . '-' . $tab_id;
 		$page       = $this->_args['id'] . '_' . $tab_id;
@@ -324,8 +249,10 @@ class SettingsAPI extends \PageAPI {
 		echo "<div id='section-{$tab_id}' class='section' style='{$active_tab}'>";
 		
 		do_settings_sections( $page );
+		do_settings_sections( $page_id ); // TEMP debug
 
-		echo 'do_settings_sections: ' . $page_id; // TEMP debug
+		echo 'do_settings_sections: PAGE_ID: ' . $page_id; // TEMP debug
+		echo '<br>do_settings_sections: PAGE: ' . $page; // TEMP debug
 
 		echo '</div>';
 
@@ -462,6 +389,29 @@ class SettingsAPI extends \PageAPI {
 		return $default;
 
 	} // END get_option()
+
+	/**
+	 * @todo desc
+	 *
+	 * @since  0.0.2
+	 * @return string HTML output
+	 */
+	public function js_footer() { ?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
+			$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
+				e.preventDefault();
+				if ( ! $(this).hasClass('nav-tab-active') ) {
+					$('.section').hide();
+					$('.nav-tab').removeClass('nav-tab-active');
+					$(this).addClass('nav-tab-active');
+					$('#section-' + $(this).attr('id')).show();
+				}
+			});
+		});
+		</script>
+		<?php
+	} // END js_footer()
 
 	/**
 	 * @todo desc
