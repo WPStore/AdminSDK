@@ -4,7 +4,7 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.6-dev
+ * @version 0.0.7-dev
  */
 class SettingsAPI extends \PageAPI {
 
@@ -14,7 +14,7 @@ class SettingsAPI extends \PageAPI {
 	 * @since 0.0.1
 	 * @var   array
 	 */
-	private $_sections = array();
+	protected $_sections = array();
 
 	/**
 	 * Settings fields array
@@ -22,7 +22,7 @@ class SettingsAPI extends \PageAPI {
 	 * @since 0.0.1
 	 * @var   array
 	 */
-	private $_fields = array();
+	protected $_fields = array();
 
 	/**
 	 * @todo desc
@@ -32,27 +32,19 @@ class SettingsAPI extends \PageAPI {
 	 */
 	public function __construct( $instance_args = array() ) {
 
-		// parent::__construct($instance_args); // @todo
-
 		$instance_args['id'] = sanitize_key( $instance_args['id'] );
 
 		$args = wp_parse_args(
 			$instance_args,
 			array(
-				// 'id' => $this->screen->id,
 				'title'   => __( 'Settings' ),
-				'tabbed'  => false,
-				'ajax'    => false,
-				'sidebar' => false,
+				'ajax'    => true,
+				'sidebar' => true,
 				'class'   => 'page settings-page',
 			)
 		);
 
-		$this->_args = $args;
-
-		if ( $args['ajax'] ) {
-			add_action( 'admin_footer', array( $this, '_js_vars' ) );
-		}
+		parent::__construct( $args );
 
 	} // END __construct()
 
@@ -152,7 +144,7 @@ class SettingsAPI extends \PageAPI {
 
 		add_action( 'admin_footer', array( $this, 'js_footer' ) );
 
-		if ( $this->_args['tabbed'] ) {
+		if ( $this->_args['tabs'] ) {
 			$tabs = $this->get_tabs();
 			$this->tab_nav( $tabs );
 		}
@@ -161,7 +153,7 @@ class SettingsAPI extends \PageAPI {
 			<?php
 			wp_nonce_field( "{$this->_args['id']}-settings-update", "{$this->_args['id']}-settings-nonce" ); // generate ids
 
-			if ( $this->_args['tabbed'] ) {
+			if ( $this->_args['tabs'] ) {
 				$this->tabs( $tabs );
 			} else {
 				$this->tab_content( $this->_args['id'], true );
@@ -176,6 +168,8 @@ class SettingsAPI extends \PageAPI {
 
 	} // END body()
 
+	
+
 	/**
 	 * Return filtered settings sections 
 	 * 
@@ -183,7 +177,7 @@ class SettingsAPI extends \PageAPI {
 	 * @return array settings sections
 	 */
 	public function get_sections() {
-		return apply_filters( "sections_{$this->_args['id']}", $this->_sections );
+		return apply_filters( "sections_{$this->_args['id']}", $this->sections() ); // $this->_sections
 	} // END get_sections()
 
 	/**
@@ -201,6 +195,28 @@ class SettingsAPI extends \PageAPI {
 
 	} // END set_sections()
 
+	function sections() {
+		$sections = array(
+			'main'     => array(
+				'tab'	 => 'general',
+				'title'	 => __( 'Main Options', 'google-analyticator' ), // null -- hide the text
+				'desc'	 => __( 'This is a short description for a settings SECTION', 'google-analyticator' ),
+			),
+			'security' => array(
+				'tab'	 => 'general',
+				'title'	 => __( 'Security', 'google-analyticator' ),
+//				'desc'	 => __( 'SEC This is a short description for a settings SECTION', 'google-analyticator' ),
+			),
+			'privacy'  => array(
+				'tab'	 => 'advanced',
+				'title'	 => __( 'Privacy', 'google-analyticator' ),
+				'desc'	 => __( 'Privacy! hort description for a settings SECTION', 'google-analyticator' ),
+			),
+		);
+
+		return $sections;
+	}
+
 	/**
 	 * Return filtered settings fields
 	 * 
@@ -208,7 +224,7 @@ class SettingsAPI extends \PageAPI {
 	 * @return array settings fields
 	 */
 	public function get_fields() {
-		return apply_filters( "fields_{$this->_args['id']}", $this->_fields );
+		return apply_filters( "fields_{$this->_args['id']}", $this->fields() ); // $this->_fields
 	} // END get_fields()
 
 	/**
@@ -225,6 +241,71 @@ class SettingsAPI extends \PageAPI {
 		return $this;
 
 	} // END set_fields()
+
+	function fields() {
+
+		$fields = array(
+			'main'		 => array(
+				'google_ua'	 => array(
+					'label'	 => __( 'Google Analytics UA', 'google-analyticator' ),
+					'desc'	 => __( 'Set your UA', 'google-analyticator' ),
+					'type'	 => 'google_ua',
+//					'option' => 'analytics_2nd', // save into add_option('analytics_2nd') || if (!isset 'option') add_option( $this->_args['id'] )
+				),
+				'textarea'	 => array(
+					'label'	 => __( 'Textarea Input', 'wedevs' ),
+					'desc'	 => __( 'Textarea description', 'wedevs' ),
+					'type'	 => 'text'
+				),
+			),
+			'security'	 => array(
+				'google_ua'	 => array(
+					'label'	 => __( 'Text Input (integer validation)', 'google-analyticator' ),
+					'desc'	 => __( 'Text input description', 'google-analyticator' ),
+					'type'	 => 'google_ua',
+				),
+				'textarea'	 => array(
+					'label'	 => __( 'Textarea Input', 'wedevs' ),
+					'desc'	 => __( 'Textarea description', 'wedevs' ),
+					'type'	 => 'text'
+				),
+				'checkbox'	 => array(
+					'label'	 => __( 'Checkbox', 'wedevs' ),
+					'desc'	 => __( 'Checkbox Label', 'wedevs' ),
+					'type'	 => 'text'
+				),
+			),
+			'privacy'	 => array(
+				'google_ua'	 => array(
+					'label'	 => __( 'Text Input (integer validation)', 'google-analyticator' ),
+					'desc'	 => __( 'Text input description', 'google-analyticator' ),
+					'type'	 => 'google_ua',
+				),
+				'textarea'	 => array(
+					'label'	 => __( 'Textarea Input', 'wedevs' ),
+					'desc'	 => __( 'Textarea description', 'wedevs' ),
+					'type'	 => 'textarea'
+				),
+				'checkbox'	 => array(
+					'label'	 => __( 'Checkbox', 'wedevs' ),
+					'desc'	 => __( 'Checkbox Label', 'wedevs' ),
+					'type'	 => 'checkbox'
+				),
+				'radio'		 => array(
+					'label'		 => __( 'Radio Button', 'wedevs' ),
+					'desc'		 => __( 'A radio button', 'wedevs' ),
+					'type'		 => 'radio',
+					'options'	 => array(
+						'yes'	 => 'Yes',
+						'no'	 => 'No'
+					)
+				),
+			),
+		);
+
+		return $fields;
+
+	}
 
 	/**
 	 * @todo desc

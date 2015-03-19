@@ -4,7 +4,7 @@
  *
  * @todo desc
  *
- * @version 0.0.6-dev
+ * @version 0.0.7-dev
  */
 abstract class PageAPI {
 
@@ -47,9 +47,7 @@ abstract class PageAPI {
 		$args = wp_parse_args(
 			$instance_args,
 			array(
-				// 'id' => $this->screen->id,
-				// 'title'   => __( 'Title' ),
-				'tabbed'  => false,
+				'tabs'    => false,
 				'ajax'    => false,
 				'sidebar' => false,
 				'class'   => 'page',
@@ -57,7 +55,7 @@ abstract class PageAPI {
 		);
 
 		$this->_args = $args;
-		$this->_tabs = $args['tabbed'];
+		$this->_tabs = $args['tabs'];
 
 		if ( $args['ajax'] ) {
 			add_action( 'admin_footer', array( $this, '_js_vars' ) );
@@ -75,8 +73,11 @@ abstract class PageAPI {
 		?>
 <div id="<?php echo $this->_args['id']; ?>" class="wrap <?php echo $this->_args['class']; ?>">
 	<div class="page-header">
-		<div class="header-right">
-			<?php 
+		<div class="header-right alignright">
+			<?php
+			/**
+			 * @todo merge all sidebar widgets to allow for custom sort
+			 */
 			do_action( 'page_header_right' );
 			do_action( "page_header_right_{$this->_args['id']}" );
 			?>
@@ -111,6 +112,9 @@ abstract class PageAPI {
 
 		echo '<div id="postbox-container-1" class="postbox-container">';
 
+		/**
+		 * @todo merge all sidebar widgets to allow for custom sort
+		 */
 		do_action( 'page_sidebar' );
 		do_action( "page_sidebar_{$this->_args['id']}" );
 
