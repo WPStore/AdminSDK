@@ -4,7 +4,7 @@
  *
  * @todo desc
  *
- * @version 0.0.7-dev
+ * @version 0.0.8-dev
  */
 abstract class PageAPI {
 
@@ -18,7 +18,7 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since 0.0.3
 	 * @var   array|bool
 	 */
@@ -35,7 +35,7 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.1
 	 * @param  array $instance_args
 	 */
@@ -57,14 +57,18 @@ abstract class PageAPI {
 		$this->_tabs = $args['tabs'];
 
 		if ( $args['ajax'] ) {
-			add_action( 'admin_footer', array( $this, '_js_vars' ) );
+			add_action( 'admin_footer', array( $this, '_js_vars' ) ); // @todo combine all footer js code
+		}
+
+		if ( $args['tabs'] ) {
+			add_action( 'admin_footer', array( $this, 'js_footer' ) ); // @todo combine all footer js code
 		}
 
 	} // END __construct()
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.1
 	 * @return sring HTML output
 	 */
@@ -74,13 +78,15 @@ abstract class PageAPI {
 	<div id="poststuff">
 		<div id="post-body" class="metabox-holder columns-<?php echo $this->_args['sidebar'] ? '2' : '1'; ?>">
 			<div id="post-body-content" style="position: relative;">
-				<?php $this->body(); ?>
+				<?php $this->body( $this->_args['tabs'] ); ?>
 			</div><!-- #post-body-content -->
-			<?php if ( $this->_args['sidebar'] ) { $this->sidebar(); } ?>
+			<?php
+				if ( $this->_args['sidebar'] ) { $this->sidebar(); }
+				$this->footer();
+			?>
 		</div>
-		<div class="clear"></div>
+		<br class="clear">
 	</div><!-- #poststuff -->
-	<?php $this->footer(); ?>
 </div><!-- .wrap -->
 <?php
 	} // END display()
@@ -88,7 +94,7 @@ abstract class PageAPI {
 	/**
 	 * @todo desc
 	 * @todo action docu
-	 * 
+	 *
 	 * @since 0.0.7
 	 */
 	protected function header() { ?>
@@ -99,12 +105,35 @@ abstract class PageAPI {
 			<h2><?php echo $this->_args['title']; ?></h2>
 		</div>
 	<?php
-	}
+	} // END header()
 
 	/**
 	 * @todo desc
+	 *
+	 * @since 0.0.1
+	 * @param array|bool $tabs
 	 */
-	public abstract function body();
+	public function body( $tabs ) {
+
+		if ( $tabs ) {
+
+			$this->add_tabs( $tabs );
+			$this->tab_nav( $tabs );
+			$this->tabs( $tabs );
+
+		} else {
+
+			$this->content();
+
+		} // END if/else
+
+	} // END body()
+
+	protected function content() {
+		/**
+		 * HTML/PHP output
+		 */
+	} // END content()
 
 	/**
 	 * @todo desc
@@ -127,14 +156,15 @@ abstract class PageAPI {
 	 * @todo action docu
 	 * @todo possible action alias
 	 *       do_action( "page_footer_{$this->_args['id']}" );
-	 *
+	 *<div id="postbox-container-2" class="postbox-container">
 	 * @since 0.0.7
 	 * @param type $wrap
 	 */
-	protected function footer( $wrap = true ) {
-		if ( $wrap ) { echo '<div id="page-footer">'; }
-			do_action( 'page_footer', $this->_args['id'] );
-		if ( $wrap ) { echo '</div>'; }
+	protected function footer( $wrap = true ) { ?>
+		<div id="postbox-container-2" class="postbox-container">
+			<?php do_action( 'page_footer', $this->_args['id'] ); ?>
+		</div><!-- #postbox-container-1 .postbox-container -->
+	<?php
 	} // END footer()
 
 	/**
@@ -199,7 +229,7 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.2
 	 * @param  array $tabs
 	 * @return string HTML output
@@ -214,6 +244,7 @@ abstract class PageAPI {
 		foreach ( (array) $tabs as $tab_id => $title  ) {
 
 			$active_class = ( $active_tab == $tab_id ? ' nav-tab-active' : '' );
+
 			echo "<a id='{$tab_id}' class='nav-tab{$active_class}' href='?page={$page}&tab={$tab_id}'>{$title}</a>"; // class='{$this->_args['id']}-tab
 
 		} // END foreach
@@ -224,7 +255,7 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.2
 	 * @param  array $tabs
 	 * @return void
@@ -245,7 +276,7 @@ abstract class PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.2
 	 * @param  string $tab_id
 	 * @param  bool $active
@@ -263,5 +294,28 @@ abstract class PageAPI {
 		echo '</div>';
 
 	} // END tab_content()
+
+	/**
+	 * @todo desc
+	 *
+	 * @since  0.0.2
+	 * @return string HTML output
+	 */
+	public function js_footer() { ?>
+		<script type="text/javascript">
+		jQuery(document).ready(function($){
+			$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
+				e.preventDefault();
+				if ( ! $(this).hasClass('nav-tab-active') ) {
+					$('.section').hide();
+					$('.nav-tab').removeClass('nav-tab-active');
+					$(this).addClass('nav-tab-active');
+					$('#section-' + $(this).attr('id')).show();
+				}
+			});
+		});
+		</script>
+		<?php
+	} // END js_footer()
 
 } // END class PageAPI

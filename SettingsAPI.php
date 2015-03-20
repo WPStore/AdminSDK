@@ -4,7 +4,7 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.7-dev
+ * @version 0.0.8-dev
  */
 class SettingsAPI extends \PageAPI {
 
@@ -50,7 +50,7 @@ class SettingsAPI extends \PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.1
 	 * @return void
 	 */
@@ -84,7 +84,7 @@ class SettingsAPI extends \PageAPI {
 	/**
 	 * @todo desc
 	 * @todo replace create_function() with anonymous functions
-	 * 
+	 *
 	 * @param string $tab
 	 * @param string $section
 	 * @param array  $values
@@ -144,16 +144,14 @@ class SettingsAPI extends \PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since 0.0.2
 	 * @return string HTML output
 	 */
-	public function body() {
+	public function body( $tabs ) {
 
-		add_action( 'admin_footer', array( $this, 'js_footer' ) );
-
-		if ( $this->_args['tabs'] ) {
-			$tabs = $this->get_tabs();
+		if ( $tabs ) {
+			$this->add_tabs( $tabs );
 			$this->tab_nav( $tabs );
 		}
 		?>
@@ -161,7 +159,7 @@ class SettingsAPI extends \PageAPI {
 			<?php
 			wp_nonce_field( "{$this->_args['id']}-settings-update", "{$this->_args['id']}-settings-nonce" ); // generate ids
 
-			if ( $this->_args['tabs'] ) {
+			if ( $tabs ) {
 				$this->tabs( $tabs );
 			} else {
 				$this->tab_content( $this->_args['id'], true );
@@ -176,11 +174,11 @@ class SettingsAPI extends \PageAPI {
 
 	} // END body()
 
-	
+
 
 	/**
-	 * Return filtered settings sections 
-	 * 
+	 * Return filtered settings sections
+	 *
 	 * @sinec  0.0.1
 	 * @return array settings sections
 	 */
@@ -207,7 +205,7 @@ class SettingsAPI extends \PageAPI {
 
 	/**
 	 * Return filtered settings fields
-	 * 
+	 *
 	 * @since  0.0.1
 	 * @return array settings fields
 	 */
@@ -234,7 +232,7 @@ class SettingsAPI extends \PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.1
 	 * @param  string $tab_id
 	 * @param  bool $active
@@ -245,9 +243,9 @@ class SettingsAPI extends \PageAPI {
 		$page_id    = str_replace( '-', '_', $this->_args['id'] ) . '-' . $tab_id;
 		$page       = $this->_args['id'] . '_' . $tab_id;
 		$active_tab = $active ? 'display: block;' : 'display: none;';
-		
+
 		echo "<div id='section-{$tab_id}' class='section' style='{$active_tab}'>";
-		
+
 		do_settings_sections( $page );
 		do_settings_sections( $page_id ); // TEMP debug
 
@@ -260,7 +258,7 @@ class SettingsAPI extends \PageAPI {
 
 	/**
 	 * @todo desc
-	 * 
+	 *
 	 * @since  0.0.1
 	 * @return string HTML submit button
 	 */
@@ -393,29 +391,6 @@ class SettingsAPI extends \PageAPI {
 	/**
 	 * @todo desc
 	 *
-	 * @since  0.0.2
-	 * @return string HTML output
-	 */
-	public function js_footer() { ?>
-		<script type="text/javascript">
-		jQuery(document).ready(function($){
-			$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
-				e.preventDefault();
-				if ( ! $(this).hasClass('nav-tab-active') ) {
-					$('.section').hide();
-					$('.nav-tab').removeClass('nav-tab-active');
-					$(this).addClass('nav-tab-active');
-					$('#section-' + $(this).attr('id')).show();
-				}
-			});
-		});
-		</script>
-		<?php
-	} // END js_footer()
-
-	/**
-	 * @todo desc
-	 * 
 	 * @since  0.0.1
 	 * @return string HTML output
 	 */
