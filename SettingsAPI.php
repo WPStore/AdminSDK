@@ -4,7 +4,7 @@
  *
  * Create a settings page easily, optionally with tabs and/or sidebar
  *
- * @version 0.0.8-dev
+ * @version 0.0.9-dev
  */
 class SettingsAPI extends \PageAPI {
 
@@ -104,6 +104,15 @@ class SettingsAPI extends \PageAPI {
 
 	} // END register_section()
 
+	/**
+	 * @todo desc
+	 *
+	 * @since 0.0.1
+	 * @param string $tab
+	 * @param string $section
+	 * @param string $field
+	 * @param array $values
+	 */
 	protected function register_field( $tab, $section, $field, $values ) {
 
 		if ( isset( $values['option'] ) ) {
@@ -168,13 +177,8 @@ class SettingsAPI extends \PageAPI {
 			$this->print_submit();
 			?>
 		</form>
-		<?php do_action( "{$this->_args['id']}_post_form" ); // @todo rename ?>
-
-<?php
-
+		<?php do_action( "{$this->_args['id']}_post_form" );
 	} // END body()
-
-
 
 	/**
 	 * Return filtered settings sections
