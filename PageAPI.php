@@ -1,10 +1,12 @@
 <?php
+
+if ( ! class_exists( 'PageAPI' ) ) :
 /**
  * Page API Class
  *
  * @todo desc
  *
- * @version 0.0.9-dev
+ * @version 0.0.10-dev
  */
 abstract class PageAPI {
 
@@ -81,8 +83,8 @@ abstract class PageAPI {
 				<?php $this->body( $this->_args['tabs'] ); ?>
 			</div><!-- #post-body-content -->
 			<?php
-				if ( $this->_args['sidebar'] ) { $this->sidebar(); }
-				$this->footer();
+			if ( $this->_args['sidebar'] ) { $this->sidebar(); }
+			$this->footer();
 			?>
 		</div>
 		<br class="clear">
@@ -319,3 +321,5 @@ abstract class PageAPI {
 	} // END js_footer()
 
 } // END class PageAPI
+
+endif; // END if class_exists
