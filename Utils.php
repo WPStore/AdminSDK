@@ -71,8 +71,6 @@ if ( ! class_exists( 'Utils' ) ) {
 				}
 			}
 
-			return $status;
-
 		} // END detect_function()
 
 		/**

@@ -182,21 +182,6 @@ if ( ! class_exists( 'PageAPI' ) ) {
 		/**
 		 * @todo desc
 		 *
-		 * @since  0.0.3
-		 * @param  array $tabs
-		 * @return \PageAPI
-		 */
-	//	public function set_tabs( $tabs = array() ) {
-	//
-	//		$this->_tabs = $tabs;
-	//
-	//		return $this;
-	//
-	//	} // END set_tabs()
-
-		/**
-		 * @todo desc
-		 *
 		 * @since  0.0.2
 		 * @param  type $tabs
 		 * @return void
@@ -238,7 +223,7 @@ if ( ! class_exists( 'PageAPI' ) ) {
 		 */
 		protected function tab_nav( $tabs ) {
 
-			$page = esc_html( $_GET['page'] );
+			$page       = esc_html( $_GET['page'] );
 			$active_tab = $this->get_active_tab( $tabs );
 
 			echo '<h2 class="nav-tab-wrapper" id="' . esc_attr( $this->_args['id'] ) . '" >';

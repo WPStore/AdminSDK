@@ -40,7 +40,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			$args = wp_parse_args(
 				$instance_args,
 				array(
-					'title'   => __('Settings'),
+					'title'   => __( 'Settings' ),
 					'ajax'    => true,
 					'sidebar' => false,
 					'class'   => 'page settings-page',
@@ -130,7 +130,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			}
 
 			$label = "<label for='{$option}[{$field}]'>" . $values['label'] . '</label>';
-			$page = $this->_args['id'] . '_' . $tab;
+			$page  = $this->_args['id'] . '_' . $tab;
 
 			$args = array(
 				'id'                => $field,
@@ -208,13 +208,13 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			$sections = array(
 				'section-id-1' => array(
 					'tab'	=> 'tab-id',
-					'title'	=> __('Section 1 Title'),
-					'desc'	=> __('Section 1 Description Text'),
+					'title'	=> __( 'Section 1 Title' ),
+					'desc'	=> __( 'Section 1 Description Text' ),
 				),
 				'section-id-2' => array(
 					'tab'	=> 'tab-id',
-					'title' => __('Section 2 Title'),
-					'desc'	=> __('Section 2 Description Text'),
+					'title' => __( 'Section 2 Title' ),
+					'desc'	=> __( 'Section 2 Description Text' ),
 				),
 			);
 
@@ -244,26 +244,26 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			$fields = array(
 				'section-id-1' => array(
 					'field-id-1' => array(
-						'label'	 => __('Field 1 Label'),
-						'desc'	 => __('Field 1 Description Text'),
+						'label'	 => __( 'Field 1 Label' ),
+						'desc'	 => __( 'Field 1 Description Text' ),
 						'type'	 => 'field_type',
 						'option' => 'cust-option-id',
 					),
 					'field-id-2' => array(
-						'label'	 => __('Field 2 Label'),
-						'desc'	 => __('Field 2 Description Text'),
+						'label'	 => __( 'Field 2 Label' ),
+						'desc'	 => __( 'Field 2 Description Text' ),
 						'type'	 => 'field_type',
 					),
 				),
 				'section-id-2' => array(
 					'field-id-3' => array(
-						'label'	 => __('Field 3 Label'),
-						'desc'	 => __('Field 3 Description Text'),
+						'label'	 => __( 'Field 3 Label' ),
+						'desc'	 => __( 'Field 3 Description Text' ),
 						'type'	 => 'field_type',
 					),
 					'field-id-4' => array(
-						'label'	 => __('Field 4 Label'),
-						'desc'	 => __('Field 4 Description Text'),
+						'label'	 => __( 'Field 4 Label' ),
+						'desc'	 => __( 'Field 4 Description Text' ),
 						'type'	 => 'field_type',
 					),
 				),
@@ -283,17 +283,12 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 */
 		protected function tab_content( $tab_id, $active = false ) {
 
-			$page_id    = str_replace( '-', '_', $this->_args['id'] ) . '-' . $tab_id;
 			$page       = $this->_args['id'] . '_' . $tab_id;
 			$active_tab = $active ? 'display: block;' : 'display: none;';
 
 			echo "<div id='section-{$tab_id}' class='section' style='{$active_tab}'>";
 
 			do_settings_sections( $page );
-			do_settings_sections( $page_id ); // TEMP debug
-
-			echo 'do_settings_sections: PAGE_ID: ' . $page_id; // TEMP debug
-			echo '<br>do_settings_sections: PAGE: ' . $page; // TEMP debug
 
 			echo '</div>';
 
@@ -307,7 +302,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 */
 		protected function print_submit() {
 			submit_button();
-		}
+		} // END print_submit()
 
 		/** Field Types ******************************************************/
 
