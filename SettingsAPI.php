@@ -201,7 +201,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @since  0.0.11
 		 * @return array
 		 */
-		abstract function sections();
+		abstract public function sections();
 
 		/**
 		 * Return filtered settings fields
@@ -219,7 +219,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @since  0.0.11
 		 * @return array
 		 */
-		abstract function fields();
+		abstract public function fields();
 
 		/**
 		 * @todo desc
