@@ -201,25 +201,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @since  0.0.11
 		 * @return array
 		 */
-		protected function sections() {
-
-			// Overwrite
-			$sections = array(
-				'section-id-1' => array(
-					'tab'	=> 'tab-id',
-					'title'	=> __( 'Section 1 Title' ),
-					'desc'	=> __( 'Section 1 Description Text' ),
-				),
-				'section-id-2' => array(
-					'tab'	=> 'tab-id',
-					'title' => __( 'Section 2 Title' ),
-					'desc'	=> __( 'Section 2 Description Text' ),
-				),
-			);
-
-			return $sections;
-
-		} // END sections()
+		abstract function sections();
 
 		/**
 		 * Return filtered settings fields
@@ -237,40 +219,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @since  0.0.11
 		 * @return array
 		 */
-		protected function fields() {
-
-			// Overwrite
-			$fields = array(
-				'section-id-1' => array(
-					'field-id-1' => array(
-						'label'	 => __( 'Field 1 Label' ),
-						'desc'	 => __( 'Field 1 Description Text' ),
-						'type'	 => 'field_type',
-						'option' => 'cust-option-id',
-					),
-					'field-id-2' => array(
-						'label'	 => __( 'Field 2 Label' ),
-						'desc'	 => __( 'Field 2 Description Text' ),
-						'type'	 => 'field_type',
-					),
-				),
-				'section-id-2' => array(
-					'field-id-3' => array(
-						'label'	 => __( 'Field 3 Label' ),
-						'desc'	 => __( 'Field 3 Description Text' ),
-						'type'	 => 'field_type',
-					),
-					'field-id-4' => array(
-						'label'	 => __( 'Field 4 Label' ),
-						'desc'	 => __( 'Field 4 Description Text' ),
-						'type'	 => 'field_type',
-					),
-				),
-			);
-
-			return $fields;
-
-		} // END fields()
+		abstract function fields();
 
 		/**
 		 * @todo desc
