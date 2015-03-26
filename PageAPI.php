@@ -7,7 +7,7 @@ if ( ! class_exists( 'PageAPI' ) ) {
 	 *
 	 * @todo desc
 	 *
-	 * @version 0.0.10-dev
+	 * @version 0.0.11-dev
 	 */
 	abstract class PageAPI {
 

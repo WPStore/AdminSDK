@@ -7,7 +7,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 	 *
 	 * Create a settings page easily, optionally with tabs and/or sidebar
 	 *
-	 * @version 0.0.10-dev
+	 * @version 0.0.11-dev
 	 */
 	class SettingsAPI extends \PageAPI {
 
@@ -48,6 +48,8 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			);
 
 			parent::__construct( $args );
+
+			$this->register_settings();
 
 		} // END __construct()
 
@@ -95,7 +97,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		protected function register_section( $tab, $section, $values ) {
 
 			if ( isset( $values['desc'] ) && ! empty( $values['desc'] ) ) {
-				// $values['desc']	 = '<div class="inside">' . $values['desc'] . '</div>';
+				// $callback = function( $values ) { echo "<p>" . str_replace( '"', '\"', $values['desc'] ) . "</p>"; };
 				$callback = create_function( '', 'echo "<p>' . str_replace( '"', '\"', $values['desc'] ) . '</p>";' );
 			} else {
 				$callback = '__return_false';
@@ -181,6 +183,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 				?>
 			</form>
 			<?php do_action( "{$this->_args['id']}_post_form" );
+
 		} // END body()
 
 		/**
@@ -190,25 +193,15 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @return array settings sections
 		 */
 		public function get_sections() {
-			// return apply_filters( "sections_{$this->_args['id']}", $this->sections() );
-			return $this->sections();
+			return apply_filters( "sections_{$this->_args['id']}", $this->sections() );
 		} // END get_sections()
 
 		/**
-		 * Set settings sections
+		 * @todo desc
 		 *
-		 * @since  0.0.1
-		 * @param  array $sections setting sections
-		 * @return \SettingsAPI
+		 * @since  0.0.11
+		 * @return array
 		 */
-		public function set_sections( $sections ) {
-
-			$this->_sections = $sections;
-
-			return $this;
-
-		} // END set_sections()
-
 		protected function sections() {
 
 			// Overwrite
@@ -236,25 +229,15 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @return array settings fields
 		 */
 		public function get_fields() {
-			// return apply_filters( "fields_{$this->_args['id']}", $this->fields() );
-			return $this->fields();
+			return apply_filters( "fields_{$this->_args['id']}", $this->fields() );
 		} // END get_fields()
 
 		/**
-		 * Set settings fields
+		 * @todo desc
 		 *
-		 * @since  0.0.1
-		 * @param  array $fields settings fields array
-		 * @return \SettingsAPI
+		 * @since  0.0.11
+		 * @return array
 		 */
-		public function set_fields( $fields ) {
-
-			$this->_fields = $fields;
-
-			return $this;
-
-		} // END set_fields()
-
 		protected function fields() {
 
 			// Overwrite
