@@ -66,7 +66,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			}
 
 			foreach ( $this->get_sections() as $section => $values ) {
-				$tab = ( isset( $values['tab'] ) ) ? $values['tab'] : 'nontab';
+				$tab    = ( isset( $values['tab'] ) ) ? $values['tab'] : 'nontab';
 				$fields = $this->get_fields();
 
 				$this->register_section( $tab, $section, $values );
@@ -120,17 +120,9 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 */
 		protected function register_field( $tab, $section, $field, $values ) {
 
-			if ( isset( $values['option'] ) ) {
-				$option = $values['option'];
-				if ( false == get_option( $values['option'] ) ) {
-					add_option( $values['option'] );
-				}
-			} else {
-				$option = $this->_args['id'];
-			}
-
-			$label = "<label for='{$option}[{$field}]'>" . $values['label'] . '</label>';
-			$page  = $this->_args['id'] . '_' . $tab;
+			$option = $this->set_option( $values['option'] );
+			$label  = "<label for='{$option}[{$field}]'>" . $values['label'] . '</label>';
+			$page   = $this->_args['id'] . '_' . $tab;
 
 			$args = array(
 				'id'                => $field,
@@ -146,8 +138,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 
 			if ( isset( $values['type'] ) && method_exists( $this, 'field_' . $values['type'] ) ) {
 				$type = $values['type'];
-			}
-			else {
+			} else {
 				$type = 'debug';
 				$args['type'] = $values['type'];
 			}
@@ -155,6 +146,21 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			add_settings_field( $field, $label, array( $this, 'field_' . $type ), $page, $section, $args );
 
 		} // END register_field()
+
+		private function set_option( $value ) {
+
+			if ( isset( $value ) ) {
+				$option = $value;
+				if ( false == get_option( $value ) ) {
+					add_option( $value );
+				}
+			} else {
+				$option = $this->_args['id'];
+			}
+
+			return $option;
+
+		} // END set_option()
 
 		/**
 		 * @todo desc
