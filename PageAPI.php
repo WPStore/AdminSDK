@@ -63,7 +63,7 @@ if ( ! class_exists( 'PageAPI' ) ) {
 			}
 
 			if ( $args['tabs'] ) {
-				add_action( 'admin_footer', array( $this, 'js_footer' ) ); // @todo combine all footer js code
+				add_action( 'admin_footer', array( $this, 'tabs_js' ) ); // @todo combine all footer js code
 			}
 
 		} // END __construct()
@@ -117,7 +117,7 @@ if ( ! class_exists( 'PageAPI' ) ) {
 		 */
 		public function body( $tabs ) {
 
-			if ( $tabs ) {
+			if ( $tabs && is_array( $tabs ) ) {
 
 				$this->add_tabs( $tabs );
 				$this->tab_nav( $tabs );
@@ -131,6 +131,11 @@ if ( ! class_exists( 'PageAPI' ) ) {
 
 		} // END body()
 
+		/**
+		 * @todo desc
+		 *
+		 * @since 0.0.9
+		 */
 		protected function content() {
 			/**
 			 * HTML/PHP output
@@ -288,7 +293,7 @@ if ( ! class_exists( 'PageAPI' ) ) {
 		 * @since  0.0.2
 		 * @return string HTML output
 		 */
-		public function js_footer() { ?>
+		public function tabs_js() { ?>
 			<script type="text/javascript">
 			jQuery(document).ready(function($){
 				$('.nav-tab-wrapper').on('click','a.nav-tab', function(e){
