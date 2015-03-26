@@ -40,9 +40,9 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 			$args = wp_parse_args(
 				$instance_args,
 				array(
-					'title'   => __( 'Settings' ),
+					'title'   => __('Settings'),
 					'ajax'    => true,
-					'sidebar' => true,
+					'sidebar' => false,
 					'class'   => 'page settings-page',
 				)
 			);
@@ -190,7 +190,8 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @return array settings sections
 		 */
 		public function get_sections() {
-			return apply_filters( "sections_{$this->_args['id']}", $this->sections() ); // $this->_sections
+			// return apply_filters( "sections_{$this->_args['id']}", $this->sections() );
+			return $this->sections();
 		} // END get_sections()
 
 		/**
@@ -208,7 +209,25 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 
 		} // END set_sections()
 
-		function sections() {}
+		protected function sections() {
+
+			// Overwrite
+			$sections = array(
+				'section-id-1' => array(
+					'tab'	=> 'tab-id',
+					'title'	=> __('Section 1 Title'),
+					'desc'	=> __('Section 1 Description Text'),
+				),
+				'section-id-2' => array(
+					'tab'	=> 'tab-id',
+					'title' => __('Section 2 Title'),
+					'desc'	=> __('Section 2 Description Text'),
+				),
+			);
+
+			return $sections;
+
+		} // END sections()
 
 		/**
 		 * Return filtered settings fields
@@ -217,7 +236,8 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		 * @return array settings fields
 		 */
 		public function get_fields() {
-			return apply_filters( "fields_{$this->_args['id']}", $this->fields() ); // $this->_fields
+			// return apply_filters( "fields_{$this->_args['id']}", $this->fields() );
+			return $this->fields();
 		} // END get_fields()
 
 		/**
@@ -235,7 +255,40 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 
 		} // END set_fields()
 
-		function fields() {}
+		protected function fields() {
+
+			// Overwrite
+			$fields = array(
+				'section-id-1' => array(
+					'field-id-1' => array(
+						'label'	 => __('Field 1 Label'),
+						'desc'	 => __('Field 1 Description Text'),
+						'type'	 => 'field_type',
+						'option' => 'cust-option-id',
+					),
+					'field-id-2' => array(
+						'label'	 => __('Field 2 Label'),
+						'desc'	 => __('Field 2 Description Text'),
+						'type'	 => 'field_type',
+					),
+				),
+				'section-id-2' => array(
+					'field-id-3' => array(
+						'label'	 => __('Field 3 Label'),
+						'desc'	 => __('Field 3 Description Text'),
+						'type'	 => 'field_type',
+					),
+					'field-id-4' => array(
+						'label'	 => __('Field 4 Label'),
+						'desc'	 => __('Field 4 Description Text'),
+						'type'	 => 'field_type',
+					),
+				),
+			);
+
+			return $fields;
+
+		} // END fields()
 
 		/**
 		 * @todo desc

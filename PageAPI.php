@@ -32,7 +32,6 @@ if ( ! class_exists( 'PageAPI' ) ) {
 		 *
 		 * @since  0.0.1
 		 * @var    object
-		 * @access protected
 		 */
 		protected $screen;
 
