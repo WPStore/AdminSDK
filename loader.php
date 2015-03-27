@@ -10,7 +10,7 @@ function AdminSDK_require_files() {
 	$path   = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
 	$folder = 'AdminSDK' . DIRECTORY_SEPARATOR;
 
-	if ( file_exists( $path . 'PageAPI.php') ) {
+	if ( file_exists( $path . 'PageAPI.php' ) ) {
 
 		/** PageAPI: Create admin pages */
 		require_once $path . 'PageAPI.php';
@@ -21,7 +21,7 @@ function AdminSDK_require_files() {
 		/** Utils: Collection of utility functions */
 		require_once $path . 'Utils.php';
 
-	} elseif ( file_exists( $path . $folder . 'PageAPI.php') ) {
+	} elseif ( file_exists( $path . $folder . 'PageAPI.php' ) ) {
 
 		/** PageAPI: Create admin pages */
 		require_once $path . $folder . 'PageAPI.php';

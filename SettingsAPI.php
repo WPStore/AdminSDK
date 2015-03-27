@@ -280,7 +280,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 
 			// <input id="blogdescription" class="regular-text" type="text" value="Just another WP Trunk Sites site" name="blogdescription">
 
-//			$field  = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s" />', $size, $args['option'], $args['id'], $value );
+			// $field  = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s" />', $size, $args['option'], $args['id'], $value );
 			$field  = '<input type="text" class="' . $size . '-text" id="'. $id . '" name="'. $id . '" value="'. $value . '" ' . $attributes . ' />';
 			$field .= '<p class="description">' . $args['desc'] . '</p>';
 
