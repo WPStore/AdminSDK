@@ -49,6 +49,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 
 			parent::__construct( $args );
 
+			/** @todo more elegant way? */
 			$this->register_settings();
 
 		} // END __construct()
@@ -142,6 +143,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 				'std'               => isset( $values['default'] ) ? $values['default'] : '',
 				'sanitize_callback' => isset( $values['sanitize_callback'] ) ? $values['sanitize_callback'] : '',
 				'option'            => $option, // (add_)option to be saved to
+				'other_attributes'  => '',
 			);
 
 			if ( isset( $values['type'] ) && method_exists( $this, 'field_' . $values['type'] ) ) {
@@ -255,20 +257,34 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 		/** Field Types ******************************************************/
 
 		/**
-		 * @todo COPIED + modified
-		 * @param type $args
+		 * INPUT text
+		 *
+		 * @since  0.0.1
+		 * @param  array $args
+		 * @return string <input type="text" /> HTML output
 		 */
 		public function field_text( $args ) {
 
+			$id    = $args['option'] . '[' . $args['id'] . ']';
 			$value = esc_attr( $this->get_option( $args['id'], $args['section'], $args['std'] ) );
-			$size = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+			$size  = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+
+			$attributes = '';
+			if ( is_array( $args['other_attributes'] ) ) {
+				foreach ( $args['other_attributes'] as $attribute => $value ) {
+					$attributes .= $attribute . '="' . esc_attr( $value ) . '" '; // Trailing space is important
+				}
+			} elseif ( ! empty( $args['other_attributes'] ) ) { // Attributes provided as a string
+				$attributes = $other_attributes;
+			}
 
 			// <input id="blogdescription" class="regular-text" type="text" value="Just another WP Trunk Sites site" name="blogdescription">
 
-			$html = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['option'], $args['id'], $value );
-			$html .= sprintf( '<p class="description"> %s</p>', $args['desc'] );
+//			$field  = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s" />', $size, $args['option'], $args['id'], $value );
+			$field  = '<input type="text" class="' . $size . '-text" id="'. $id . '" name="'. $id . '" value="'. $value . '" ' . $attributes . ' />';
+			$field .= '<p class="description">' . $args['desc'] . '</p>';
 
-			echo $html;
+			echo $field;
 
 		} // END field_text()
 
