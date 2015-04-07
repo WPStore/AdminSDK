@@ -105,6 +105,7 @@ if ( ! class_exists( 'PageAPI' ) ) {
 					<?php do_action( 'page_header_right', $this->_args['id'] ); ?>
 				</div>
 				<h2><?php echo $this->_args['title']; ?></h2>
+				<div class="clear"></div>
 			</div>
 		<?php
 		} // END header()
