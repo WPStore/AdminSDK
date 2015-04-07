@@ -1,8 +1,15 @@
 <?php
+/**
+ * @author    WP-Store.io <code@wp-store.io>
+ * @copyright Copyright (c) 2014-2015, WP-Store.io
+ * @license   http://www.gnu.org/licenses/gpl-2.0.html GPL-2.0+
+ * @package   WPStore\AdminSDK
+ */
+
 /*
 Plugin Name: AdminSDK
 Description: Requires AdminSDK/*.php files
-Version:     0.0.7-dev
+Version:     0.0.12-dev
  */
 
 function AdminSDK_require_files() {

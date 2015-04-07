@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author    WP-Store.io <code@wp-store.io>
+ * @copyright Copyright (c) 2014-2015, WP-Store.io
+ * @license   http://www.gnu.org/licenses/gpl-2.0.html GPL-2.0+
+ * @package   WPStore\AdminSDK
+ */
 
 if ( ! class_exists( 'SettingsAPI' ) ) {
 
@@ -7,7 +13,7 @@ if ( ! class_exists( 'SettingsAPI' ) ) {
 	 *
 	 * Create a settings page easily, optionally with tabs and/or sidebar
 	 *
-	 * @version 0.0.11-dev
+	 * @version 0.0.12-dev
 	 */
 	abstract class SettingsAPI extends \PageAPI {
 
