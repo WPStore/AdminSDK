@@ -1,5 +1,6 @@
 # AdminSDK
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WPStore/AdminSDK/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WPStore/AdminSDK/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/WPStore/AdminSDK/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WPStore/AdminSDK/?branch=master)
 [![GPL-2.0+](http://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
 
 ## Usage
