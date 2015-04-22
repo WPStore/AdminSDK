@@ -18,8 +18,7 @@ class Settings extends \SettingsAPI {
 
 ```
 
-## License
-__[GPLv2](http://www.gnu.org/licenses/gpl-2.0.html)__
+## License: _[GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)_
 
     AdminSDK
     Copyright (C) 2014-2015 WP-Store.io (http://www.wp-store.io)
