@@ -1,7 +1,11 @@
 # AdminSDK
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WPStore/AdminSDK/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/WPStore/AdminSDK/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/WPStore/AdminSDK/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WPStore/AdminSDK/?branch=master)
+> Plugin Admin SDK
+
 [![GPL-2.0+](http://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![Packagist](https://img.shields.io/packagist/v/WPStore/AdminSDK.svg)](https://packagist.org/packages/WPStore/AdminSDK)
+[![GitHub tag](https://img.shields.io/github/tag/WPStore/AdminSDK.svg)](https://github.com/WPStore/AdminSDK/releases)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/WPStore/AdminSDK/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/WPStore/AdminSDK/?branch=develop)
+[![Code Coverage](https://scrutinizer-ci.com/g/WPStore/AdminSDK/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/WPStore/AdminSDK/?branch=develop)
 
 ## Usage
 
@@ -19,8 +23,7 @@ class Settings extends \SettingsAPI {
 
 ```
 
-## License
-__[GPLv2](http://www.gnu.org/licenses/gpl-2.0.html)__
+## License: _[GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)_
 
     AdminSDK
     Copyright (C) 2014-2015 WP-Store.io (http://www.wp-store.io)
